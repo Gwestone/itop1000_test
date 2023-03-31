@@ -79,6 +79,10 @@
     margin-bottom: 20px;
 }
 
+.arrow:hover{
+    cursor: pointer;
+}
+
 .spinner {
     display: flex;
     justify-content: center;

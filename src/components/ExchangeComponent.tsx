@@ -75,6 +75,14 @@ export default function ExchangeComponent(props: { rates: Rates_t }) {
         alt={"arrow"}
         width={100}
         height={100}
+        onClick={() => {
+          const tempDisplay = firstDisplay;
+          const tempSelect = firstSelect;
+          setFirstDisplay(secondDisplay);
+          setFirstSelect(secondSelect);
+          setSecondDisplay(tempDisplay);
+          setSecondSelect(tempSelect);
+        }}
       />
 
       <div className={styles.exchange_top}>
