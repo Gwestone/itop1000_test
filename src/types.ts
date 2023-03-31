@@ -4,3 +4,10 @@ export interface Rates_t {
   PLN?: number;
   CZK?: number;
 }
+
+export type Data = {
+  [key: string]: {
+    code: string;
+    value: number;
+  };
+};

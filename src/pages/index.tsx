@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
-import { Rates_t } from "@/types";
+import { Data, Rates_t } from "@/types";
 
 import styles from "@/styles/Home.module.css";
 
@@ -14,18 +14,19 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const apiKey = "fZoNtQVijPNRnO1ENhm4LOypXhioi0PI";
     fetch(
-      `https://api.apilayer.com/fixer/latest?base=UAH&symbols=USD,EUR,PLN,CZK`,
-      {
-        headers: {
-          apikey: apiKey,
-        },
-      }
+      `https://api.currencyapi.com/v3/latest?apikey=nolkmojr4LTqNd6X0a4EFuvFPeyaAna3fqMLAZdf&currencies=EUR%2CUSD%2CPLN%2CCZK&base_currency=UAH`,
+      {}
     )
       .then((response) => response.json())
       .then((data) => {
-        setExchangeRates(data.rates);
+        return Object.keys(data.data).reduce<Data>((acc, key) => {
+          acc[key] = data.data[key].value;
+          return acc;
+        }, {});
+      })
+      .then((data) => {
+        setExchangeRates(data);
         setLoading(false);
       })
       .catch((error) => {
