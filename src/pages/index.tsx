@@ -19,14 +19,14 @@ export default function Home() {
       {}
     )
       .then((response) => response.json())
-      .then((data) => {
-        return Object.keys(data.data).reduce<Data>((acc, key) => {
-          acc[key] = data.data[key].value;
+      .then((rawResponseData) => {
+        return Object.keys(rawResponseData.data).reduce<Data>((acc, key) => {
+          acc[key] = rawResponseData.data[key].value;
           return acc;
         }, {});
       })
-      .then((data) => {
-        setExchangeRates(data);
+      .then((parsedData) => {
+        setExchangeRates(parsedData);
         setLoading(false);
       })
       .catch((error) => {

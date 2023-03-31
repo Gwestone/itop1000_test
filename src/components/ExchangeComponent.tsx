@@ -6,41 +6,32 @@ import { useEffect, useState } from "react";
 
 type selectCurrencies = "USD" | "UAH" | "EUR" | "PLN" | "CZK";
 export default function ExchangeComponent(props: { rates: Rates_t }) {
-  const [firstSelect, setFirstSelect] = useState<selectCurrencies | string>(
-    "UAH"
-  );
-  const [secondSelect, setSecondSelect] = useState<selectCurrencies | string>(
-    "UAH"
-  );
+  const [amountA, setAmountA] = useState<selectCurrencies>("UAH");
+  const [amountB, setAmountB] = useState<selectCurrencies>("UAH");
 
-  const [firstDisplay, setFirstDisplay] = useState<number>(0);
-  const [secondDisplay, setSecondDisplay] = useState<number>(0);
+  const [selectA, setSelectA] = useState<number>(0);
+  const [selectB, setSelectB] = useState<number>(0);
 
-  let EUR = 1 / props.rates?.EUR!;
-  let USD = 1 / props.rates?.USD!;
-  let PLN = 1 / props.rates?.PLN!;
-  let CZK = 1 / props.rates?.CZK!;
-
-  EUR = isNaN(EUR) ? 0 : EUR;
-  USD = isNaN(USD) ? 0 : USD;
-  PLN = isNaN(PLN) ? 0 : PLN;
-  CZK = isNaN(CZK) ? 0 : CZK;
+  let EUR = 1 / (props.rates?.EUR ?? 1);
+  let USD = 1 / (props.rates?.USD ?? 1);
+  let PLN = 1 / (props.rates?.PLN ?? 1);
+  let CZK = 1 / (props.rates?.CZK ?? 1);
   let UAH = 1;
 
   const rates = { EUR: EUR, USD: USD, PLN: PLN, CZK: CZK, UAH: UAH };
   useEffect(() => {
-    // @ts-ignore
-    const total = firstDisplay / (1 / rates[firstSelect]);
-    // @ts-ignore
-    setSecondDisplay(total * (1 / rates[secondSelect]));
-  }, [firstDisplay, firstSelect]);
+    // get total amount of entered money in UAH
+    const total = selectA / (1 / rates[amountA]);
+    // translate money into second input
+    setSelectB(total * (1 / rates[amountB]));
+  }, [selectA, amountA]);
 
   useEffect(() => {
-    // @ts-ignore
-    const total = secondDisplay / (1 / rates[secondSelect]);
-    // @ts-ignore
-    setFirstDisplay(total * (1 / rates[firstSelect]));
-  }, [secondDisplay, secondSelect]);
+    // get total amount of entered money in UAH
+    const total = selectB / (1 / rates[amountB]);
+    // translate money into second input
+    setSelectA(total * (1 / rates[amountA]));
+  }, [selectB, amountB]);
 
   return (
     <div className={styles.exchange}>
@@ -49,16 +40,16 @@ export default function ExchangeComponent(props: { rates: Rates_t }) {
           className={styles.exchange_input}
           type={"number"}
           placeholder={"0"}
-          value={firstDisplay.toFixed(0)}
+          value={selectA.toFixed(0)}
           onChange={(e) => {
-            setFirstDisplay(Number(e.target.value));
+            setSelectA(Number(e.target.value));
           }}
         />
         <select
           className={styles.exchange_input}
-          value={firstSelect}
+          value={amountA}
           onChange={(e) => {
-            setFirstSelect(e.target.value);
+            setAmountA(e.target.value as selectCurrencies);
           }}
         >
           <option value="UAH">UAH</option>
@@ -76,12 +67,12 @@ export default function ExchangeComponent(props: { rates: Rates_t }) {
         width={100}
         height={100}
         onClick={() => {
-          const tempDisplay = firstDisplay;
-          const tempSelect = firstSelect;
-          setFirstDisplay(secondDisplay);
-          setFirstSelect(secondSelect);
-          setSecondDisplay(tempDisplay);
-          setSecondSelect(tempSelect);
+          const tempDisplay = selectA;
+          const tempSelect = amountA;
+          setSelectA(selectB);
+          setAmountA(amountB);
+          setSelectB(tempDisplay);
+          setAmountB(tempSelect);
         }}
       />
 
@@ -90,16 +81,16 @@ export default function ExchangeComponent(props: { rates: Rates_t }) {
           className={styles.exchange_input}
           type={"number"}
           placeholder={"0"}
-          value={Number(secondDisplay).toFixed(0)}
+          value={Number(selectB).toFixed(0)}
           onChange={(e) => {
-            setSecondDisplay(Number(e.target.value));
+            setSelectB(Number(e.target.value));
           }}
         />
         <select
           className={styles.exchange_input}
-          value={secondSelect}
+          value={amountB}
           onChange={(e) => {
-            setSecondSelect(e.target.value);
+            setAmountB(e.target.value as selectCurrencies);
           }}
         >
           <option value="UAH">UAH</option>

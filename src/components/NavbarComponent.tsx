@@ -4,15 +4,10 @@ import Image from "next/image";
 import { Rates_t } from "@/types";
 
 export default function NavbarComponent(props: { rates: Rates_t }) {
-  let EUR = 1 / props.rates?.EUR!;
-  let USD = 1 / props.rates?.USD!;
-  let PLN = 1 / props.rates?.PLN!;
-  let CZK = 1 / props.rates?.CZK!;
-
-  EUR = isNaN(EUR) ? 0 : EUR;
-  USD = isNaN(USD) ? 0 : USD;
-  PLN = isNaN(PLN) ? 0 : PLN;
-  CZK = isNaN(CZK) ? 0 : CZK;
+  let EUR = 1 / (props.rates?.EUR ?? 1);
+  let USD = 1 / (props.rates?.USD ?? 1);
+  let PLN = 1 / (props.rates?.PLN ?? 1);
+  let CZK = 1 / (props.rates?.CZK ?? 1);
 
   return (
     <div className={styles.navbar}>
